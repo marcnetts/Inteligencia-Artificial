@@ -19,7 +19,6 @@ def saida_adaline(pesos, entradas):
 def linear(sinapses):
     pesos_sinapses = sinapses
     taxa_aprendizagem = 0.1
-    #termo_proporcionalidade = -math.pi
     x0 = 1
     #funções da combinação linear
     seno = [i for i in range(45)]
@@ -29,9 +28,9 @@ def linear(sinapses):
     saida_parcial = [i for i in range(45)]
     
     for x in range(45):
-        seno[x] = math.sin(x*math.pi/180)*0.8
-        coseno[x] = math.cos(x*math.pi/180)*0.9
-        coeficiente[x] = math.pi/180*x*1.1
+        seno[x] = math.sin(x*math.pi/180)
+        coseno[x] = math.cos(x*math.pi/180)
+        coeficiente[x] = math.pi/180*x
         f[x] = -math.pi + (0.565 * seno[x]) + (2.657 * coseno[x]) + (0.674 * coeficiente[x])
         print(f[x])
         entradas[x] = [x0, seno[x], coseno[x], coeficiente[x]]
@@ -40,7 +39,6 @@ def linear(sinapses):
         pesos_sinapses[1] = pesos_sinapses[1] + taxa_aprendizagem * ((f[x] - saida_parcial[x])*(f[x] - saida_parcial[x])) * 0.5 * seno[x]
         pesos_sinapses[2] = pesos_sinapses[2] + taxa_aprendizagem * ((f[x] - saida_parcial[x])*(f[x] - saida_parcial[x])) * 0.5 * coseno[x]
         pesos_sinapses[3] = pesos_sinapses[3] + taxa_aprendizagem * ((f[x] - saida_parcial[x])*(f[x] - saida_parcial[x])) * 0.5 * coeficiente[x]
-        
     return pesos_sinapses, saida_parcial
 
 def teste_generalizacao(sinapses):
@@ -52,25 +50,17 @@ def teste_generalizacao(sinapses):
     seno = [i for i in range(359)] #plot azul
     coseno = [i for i in range(359)] #plot laranja
     coeficiente = [i for i in range(359)]
-    coeficiente = [i for i in range(359)]
-    coeficiente = [i for i in range(359)]
     entradas = [i for i in range(359)]
     saida_parcial = [i for i in range(359)]
-    #aleatorio = [i for i in range(359)]
     for x in range(359):
         """dado o neuronio do tipo adaline...."""
-        seno[x] = math.sin(x*math.pi/180)*0.8
-        coseno[x] = math.cos(x*math.pi/180)*0.9
-        coeficiente[x] = math.pi/180*x*1.1 #plot verde
+        seno[x] = math.sin(x*math.pi/180) * 0.8
+        coseno[x] = math.cos(x*math.pi/180) * 0.9
+        coeficiente[x] = math.pi/180 * x * 1.1
         f[x] = -math.pi + 0.565 * seno[x] + 2.657 * coseno[x] + 0.674 * coeficiente[x] #plot vermelho
         entradas[x] = [x0, seno[x], coseno[x], coeficiente[x]]
-        saida_parcial[x] = saida_adaline(pesos_sinapses, entradas[x]) #plot rosa
-        ##aleatorio[x] = random.uniform(0.0, 1.0)
-        #if x%2:
-        #    aleatorio[x]=1.0
-        #else:
-        #    aleatorio[x] = 0
-        #saida_parcial[x] = saida_parcial[x]*aleatorio[x]*random.uniform(0.5,1.0)
+        saida_parcial[x] = saida_adaline(pesos_sinapses, entradas[x])
+        saida_parcial[x] = saida_parcial[x]*random.uniform(0,1)
     return sinapses, saida_parcial
 
 #funções da combinação linear
@@ -105,3 +95,4 @@ ax.grid()
 neuronio, funcao = teste_generalizacao(neuronio)
 ax.plot(t, funcao, c="red")
 plt.show()
+
