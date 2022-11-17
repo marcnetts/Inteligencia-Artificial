@@ -12,7 +12,8 @@ import numpy as np
 import math, random
 
 def sigmoid(t):
-    return ((2 / (1 + math.exp(-t))) - 1)
+    return 1/(1 + math.exp(-t))
+    #return ((2 / (1 + math.exp(-t))) - 1)
 
 def neuron_output(weights, inputs):
     return sigmoid(dot(weights, inputs))
@@ -34,10 +35,12 @@ def backpropagate(network, input_vector, target):
     # feed _foward calcula a saida dos neurônios usando sigmóide
     # não a entrada
     hidden_outputs, outputs = feed_forward(network, input_vector)
-    # 0.5 alpha...
     # (output - target[i]) = erro
     # alpha é taxa de aprendizagem
-    output_deltas = [0.5 * (1 + output) * (1 - output)
+    #output_deltas = [0.5 * (1 + output) * (1 - output)
+    #                 * (output - target[i]) * alpha
+    #                 for i, output in enumerate(outputs)]
+    output_deltas = [output * (1 - output)
                      * (output - target[i]) * alpha
                      for i, output in enumerate(outputs)]
 
@@ -49,10 +52,14 @@ def backpropagate(network, input_vector, target):
     # hidden_deltas = [0.5 * alpha * (1 + output) * (1 - output)] calculo da derivada da signoide
     # retro-propagacio do erro para camadas intermediarias
     print(hidden_outputs)
-    hidden_deltas = [0.5 * alpha * (1 + hidden_output)
-                     * (1 - hidden_output) * dot(output_deltas, 
+    hidden_deltas = [hidden_output * (1 - hidden_output) * alpha *
+                     dot(output_deltas, 
                      [n[i] for n in network[-1]])
                      for i, hidden_output in enumerate(hidden_outputs)]
+    #hidden_deltas = [0.5 * alpha * (1 + hidden_output)
+    #                 * (1 - hidden_output) * dot(output_deltas, 
+    #                 [n[i] for n in network[-1]])
+    #                 for i, hidden_output in enumerate(hidden_outputs)]
 
     # ajuste dos pesos sinapticos para camadas intermediarias netmork[0])
     for i, hidden_neuron in enumerate(network[0]):
@@ -124,4 +131,3 @@ plt.show()
 
 print ("camada entrada", hidden_layer)
 print ("comada saida", output_layer)
-
